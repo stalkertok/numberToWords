@@ -86,7 +86,42 @@ func triadToWords(triad uint, numberTriad uint8, sex uint8) string {
 	return words
 }
 
+/*
+numberToWords - функция преобразует трехзначное число в словестную форму, а также добавляет к числу обозначение разрядности числа (миллион, тысяча и т.д.)
+возращает словестную форму числа
+*/
+
+func numberToWords(number uint) string {
+
+	if number == 0 {
+		return wordFirstDecade[0][0]
+	}
+
+	var words string
+
+	var numberTriad uint8 = 0
+
+	for number > 0 && numberTriad <= maxNumberTriad {
+		if number%1000 != 0 {
+			if numberTriad == NumberThousand {
+				words = triadToWords(number%1000, numberTriad, female) + words
+			} else {
+				words = triadToWords(number%1000, numberTriad, male) + words
+			}
+		}
+
+		number = number / 1000
+		numberTriad++
+	}
+
+	return words
+}
+
 func main() {
-	fmt.Println("Hello World!")
+	var number uint
+
+	fmt.Scanf("%d", &number)
+
+	fmt.Println(numberToWords(number))
 
 }
