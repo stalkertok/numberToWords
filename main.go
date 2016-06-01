@@ -3,6 +3,8 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -12,6 +14,7 @@ const (
 	numberForms    = 3
 	female         = 1
 	male           = 0
+	maxNumber      = 1000000000
 )
 
 var (
@@ -118,14 +121,25 @@ func numberToWords(number uint) string {
 		numberTriad++
 	}
 
+	words = strings.TrimSpace(words)
+
 	return words
 }
 
 func main() {
-	var number uint
+	var numberStr string
 
-	fmt.Scanf("%d", &number)
+	fmt.Scanf("%s", &numberStr)
 
-	fmt.Println(numberToWords(number))
+	if number, err := strconv.Atoi(numberStr); err == nil {
+
+		if number > 0 && number < maxNumber {
+			fmt.Println(numberToWords(uint(number)))
+		} else {
+			fmt.Println("number is not in range")
+		}
+	} else {
+		fmt.Println("not number")
+	}
 
 }
