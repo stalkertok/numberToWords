@@ -9,7 +9,7 @@ import (
 
 const (
 	maxNumberTriad = 3
-	NumberThousand = 1
+	numberThousand = 1
 	numberDigits   = 10
 	numberForms    = 3
 	female         = 1
@@ -18,19 +18,19 @@ const (
 )
 
 var (
-	wordFirstDecade [2][numberDigits]string = [2][numberDigits]string{
+	wordFirstDecade = [2][numberDigits]string{
 		{"ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"},
 		{"ноль", "одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"},
 	}
 
-	wordSecondDecade [numberDigits]string = [numberDigits]string{"", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+	wordSecondDecade  = [numberDigits]string{"", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
 		"шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"}
 
-	wordOverDecade [numberDigits]string = [numberDigits]string{"", "десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"}
+	wordOverDecade = [numberDigits]string{"", "десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"}
 
-	wordHundred [numberDigits]string = [numberDigits]string{"", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"}
+	wordHundred  = [numberDigits]string{"", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"}
 
-	wordOverHundred [maxNumberTriad][numberForms]string = [maxNumberTriad][numberForms]string{
+	wordOverHundred = [maxNumberTriad][numberForms]string{
 		{"", "", ""},
 		{"тысяча", "тысячи", "тысяч"},
 		{"миллион", "миллиона", "миллионов"},
@@ -106,14 +106,14 @@ func numberToWords(number uint) string {
 
 	var words string
 
-	var numberTriad uint8 = 0
+	numberTriad :=0
 
 	for number > 0 && numberTriad <= maxNumberTriad {
 		if number%1000 != 0 {
-			if numberTriad == NumberThousand {
-				words = triadToWords(number%1000, numberTriad, female) + words
+			if numberTriad == numberThousand {
+				words = triadToWords(number%1000, uint8(numberTriad), female) + words
 			} else {
-				words = triadToWords(number%1000, numberTriad, male) + words
+				words = triadToWords(number%1000, uint8(numberTriad), male) + words
 			}
 		}
 
