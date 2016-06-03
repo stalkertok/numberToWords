@@ -23,12 +23,12 @@ var (
 		{"ноль", "одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"},
 	}
 
-	wordSecondDecade  = [numberDigits]string{"", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+	wordSecondDecade = [numberDigits]string{"", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
 		"шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"}
 
 	wordOverDecade = [numberDigits]string{"", "десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"}
 
-	wordHundred  = [numberDigits]string{"", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"}
+	wordHundred = [numberDigits]string{"", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"}
 
 	wordOverHundred = [maxNumberTriad][numberForms]string{
 		{"", "", ""},
@@ -50,7 +50,7 @@ func triadToWords(triad uint, numberTriad uint8, sex uint8) string {
 	firstDigit := triad / 10 / 10 % 10
 	secondDigit := triad / 10 % 10
 	thirdDigit := triad % 10
-	wordSecondDecadeState := false
+	wordSecondDecadeIsEnable := false
 
 	var words string
 
@@ -61,13 +61,13 @@ func triadToWords(triad uint, numberTriad uint8, sex uint8) string {
 	if secondDigit != 0 {
 		if secondDigit == 1 && thirdDigit > 0 {
 			words += wordSecondDecade[thirdDigit] + " "
-			wordSecondDecadeState = true
+			wordSecondDecadeIsEnable = true
 		} else {
 			words += wordOverDecade[secondDigit] + " "
 		}
 	}
 
-	if thirdDigit != 0 && !wordSecondDecadeState {
+	if thirdDigit != 0 && !wordSecondDecadeIsEnable {
 		words += wordFirstDecade[sex][thirdDigit] + " "
 	}
 
@@ -78,7 +78,7 @@ func triadToWords(triad uint, numberTriad uint8, sex uint8) string {
 	}
 
 	if thirdDigit > 1 && thirdDigit < 5 {
-		if wordSecondDecadeState {
+		if wordSecondDecadeIsEnable {
 			words += wordOverHundred[numberTriad][2] + " "
 		} else {
 			words += wordOverHundred[numberTriad][1] + " "
@@ -86,7 +86,11 @@ func triadToWords(triad uint, numberTriad uint8, sex uint8) string {
 	}
 
 	if thirdDigit == 1 {
-		words += wordOverHundred[numberTriad][0] + " "
+		if wordSecondDecadeIsEnable {
+			words += wordOverHundred[numberTriad][2] + " "
+		} else {
+			words += wordOverHundred[numberTriad][0] + " "
+		}
 	}
 
 	return words
@@ -106,14 +110,14 @@ func numberToWords(number uint) string {
 
 	var words string
 
-	numberTriad :=0
+	var numberTriad uint8 = 0
 
 	for number > 0 && numberTriad <= maxNumberTriad {
 		if number%1000 != 0 {
 			if numberTriad == numberThousand {
-				words = triadToWords(number%1000, uint8(numberTriad), female) + words
+				words = triadToWords(number%1000, numberTriad, female) + words
 			} else {
-				words = triadToWords(number%1000, uint8(numberTriad), male) + words
+				words = triadToWords(number%1000, numberTriad, male) + words
 			}
 		}
 
